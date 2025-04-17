@@ -1,0 +1,75 @@
+# version: "3.8"
+
+# services:
+#   web:
+#     image: php:7.4-apache
+#     container_name: opencart-web
+#     ports:
+#       - "8080:80"
+#     volumes:
+#       - .:/var/www/html
+#     depends_on:
+#       - db
+#     working_dir: /var/www/html
+#     environment:
+#       APACHE_DOCUMENT_ROOT: /var/www/html
+
+#   db:
+#     image: mariadb:10.5
+#     container_name: opencart-db
+#     restart: always
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: opencart
+#       MYSQL_USER: opencart
+#       MYSQL_PASSWORD: opencart
+#     volumes:
+#       - opencart-db-data:/var/lib/mysql
+
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin
+#     platform: linux/amd64
+#     container_name: opencart-pma
+#     ports:
+#       - "8081:80"
+#     environment:
+#       PMA_HOST: db
+#       PMA_USER: opencart
+#       PMA_PASSWORD: opencart
+#     depends_on:
+#       - db
+
+# volumes:
+#   opencart-db-data:
+
+version: '3'
+services:
+  app:
+    build:
+        context: ..
+        dockerfile: Dockerfile
+    container_name: opencart_app
+    volumes:
+      # - ./upload:/var/www/html
+      - /Users/ziyanw/opencart/upload:/var/www/html
+    ports:
+      - 3000:80
+    depends_on:
+      - db
+    
+
+  db:
+    image: bitnami/mariadb:10.5
+    container_name: opencart_db
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=opencart
+      - MARIADB_USER=opencart_user
+      - MARIADB_PASSWORD=opencart_pass
+    platform: linux/arm64  
+    volumes:
+      - dbdata:/bitnami/mariadb
+
+volumes:
+  dbdata:
